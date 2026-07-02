@@ -1,0 +1,137 @@
+{
+  "_doc": {
+    "purpose": "Rules-based bias for the Surprise Me trait roller. Each rule keys off a Category label (must match TRAIT_OPTIONS.category exactly) and lists 'prefer' (heavily weighted picks) and 'avoid' (excluded picks) for any of the 6 other traits. Channel rules apply on top, scoped to linkedin/facebook/blog. Combo bans block specific cross-trait pairs. To add a new rule: copy an existing entry, swap the category label, and adjust prefer/avoid arrays. Labels MUST match traits.ts exactly (copy-paste them).",
+    "fields": ["voice", "audience", "intent", "angle", "length", "pov"],
+    "howToAdd": "1) Pick a Category label from TRAIT_OPTIONS.category. 2) Add a 'categoryRules' entry with prefer/avoid arrays for any trait you care about. 3) Optional: add a 'comboBans' entry to forbid a specific (traitA value, traitB value) pair. 4) Run vitest — content-lab-traits.test.ts validates labels exist."
+  },
+
+  "categoryRules": {
+    "Security/Policy (Compliance focus)": {
+      "prefer": {
+        "angle": ["Data-Driven Insight", "Problem/Solution", "The \"Hard Truth\" (Contrarian)"],
+        "intent": ["Educate & Inform (Value-add)", "Establish Authority (Trust building)", "Myth-Busting (Correcting misconceptions)"],
+        "voice": ["Authoritative (The Expert)", "Technical (Precision-focused)", "Grounded (Practical/Common sense)"],
+        "audience": ["IT Managers (Infrastructure focus)", "C-Suite Executives (ROI focus)", "Procurement Officers (Cost/SLA focus)"],
+        "pov": ["The Mentor – Guiding/Teaching", "2nd Person (You) – Direct advice to reader"]
+      },
+      "avoid": {
+        "angle": ["The Parable (Metaphor-heavy)"],
+        "voice": ["Witty (Smart humor)"],
+        "length": ["The \"LinkedIn Bro\" (Heavy white space)", "Headline/Hook Only"]
+      }
+    },
+
+    "Faith (Theology/Values)": {
+      "prefer": {
+        "angle": ["The Parable (Metaphor-heavy)", "Personal Reflection", "The \"Why\" vs. The \"How\""],
+        "intent": ["Inspire Reflection (Deep thought)", "Nurture Relationships (Loyalty)"],
+        "voice": ["Empathetic (Understanding the struggle)", "Winsome (Warm & Appealing)", "Grounded (Practical/Common sense)"],
+        "audience": ["Faith-Driven Leaders (Purpose focus)"],
+        "pov": ["1st Person (I) – Personal experience", "The Mentor – Guiding/Teaching"]
+      },
+      "avoid": {
+        "voice": ["Provocative (The Challenger)", "Urgent (High energy/Alert)"],
+        "intent": ["Generate Leads (Inquiry focus)", "Announce/Launch (Excitement)"]
+      }
+    },
+
+    "Leadership (Management/Culture)": {
+      "prefer": {
+        "angle": ["Personal Reflection", "Behind the Scenes (Transparency)", "The \"Why\" vs. The \"How\""],
+        "intent": ["Establish Authority (Trust building)", "Inspire Reflection (Deep thought)"],
+        "voice": ["Authoritative (The Expert)", "Empathetic (Understanding the struggle)", "Visionary (Looking forward)"],
+        "audience": ["C-Suite Executives (ROI focus)", "Faith-Driven Leaders (Purpose focus)", "Small Business Owners (Efficiency focus)"],
+        "pov": ["1st Person (I) – Personal experience", "The Mentor – Guiding/Teaching"]
+      }
+    },
+
+    "Tactical (How-to/Tutorial)": {
+      "prefer": {
+        "angle": ["Step-by-Step Guide", "Problem/Solution", "Before & After (Transformation)"],
+        "intent": ["Educate & Inform (Value-add)"],
+        "voice": ["Technical (Precision-focused)", "Grounded (Practical/Common sense)"],
+        "length": ["Bullet-Point Summary", "Actionable Checklist", "Standard Post (2–3 paragraphs)"],
+        "pov": ["2nd Person (You) – Direct advice to reader", "The Mentor – Guiding/Teaching"]
+      },
+      "avoid": {
+        "angle": ["The Parable (Metaphor-heavy)"],
+        "length": ["Headline/Hook Only"]
+      }
+    },
+
+    "Case Study (Success Stories)": {
+      "prefer": {
+        "angle": ["Before & After (Transformation)", "Data-Driven Insight", "Behind the Scenes (Transparency)"],
+        "intent": ["Establish Authority (Trust building)", "Generate Leads (Inquiry focus)"],
+        "voice": ["Grounded (Practical/Common sense)", "Authoritative (The Expert)"],
+        "pov": ["3rd Person (They) – Case study/External view", "The Customer – Benefits-first perspective"]
+      }
+    },
+
+    "Personal (Founder's Journey)": {
+      "prefer": {
+        "angle": ["Personal Reflection", "Behind the Scenes (Transparency)", "Before & After (Transformation)"],
+        "intent": ["Inspire Reflection (Deep thought)", "Nurture Relationships (Loyalty)"],
+        "voice": ["Empathetic (Understanding the struggle)", "Winsome (Warm & Appealing)", "Grounded (Practical/Common sense)"],
+        "pov": ["1st Person (I) – Personal experience"]
+      }
+    },
+
+    "News/Trends (Current Events)": {
+      "prefer": {
+        "angle": ["Future Predictions", "The \"Hard Truth\" (Contrarian)", "Data-Driven Insight"],
+        "intent": ["Educate & Inform (Value-add)", "Drive Web Traffic (Link-click focus)"],
+        "voice": ["Visionary (Looking forward)", "Authoritative (The Expert)", "Urgent (High energy/Alert)"]
+      }
+    },
+
+    "Product/Service (Direct Sales)": {
+      "prefer": {
+        "angle": ["Before & After (Transformation)", "Problem/Solution", "Data-Driven Insight"],
+        "intent": ["Generate Leads (Inquiry focus)", "Announce/Launch (Excitement)", "Drive Web Traffic (Link-click focus)"],
+        "voice": ["Authoritative (The Expert)", "Visionary (Looking forward)"],
+        "pov": ["The Customer – Benefits-first perspective", "2nd Person (You) – Direct advice to reader"]
+      },
+      "avoid": {
+        "pov": ["The Skeptic – Playing Devil's Advocate"]
+      }
+    },
+
+    "Community (Social Proof/Events)": {
+      "prefer": {
+        "angle": ["Behind the Scenes (Transparency)", "Personal Reflection"],
+        "intent": ["Start a Conversation (Engagement)", "Nurture Relationships (Loyalty)", "Recruitment (Attracting talent)"],
+        "voice": ["Winsome (Warm & Appealing)", "Empathetic (Understanding the struggle)", "Witty (Smart humor)"],
+        "pov": ["1st Person Plural (We) – Company/Team view", "The Peer – Collaborative/Relatable"]
+      }
+    },
+
+    "Industry (Standard Tech/MPS)": {
+      "prefer": {
+        "angle": ["Data-Driven Insight", "Problem/Solution", "Future Predictions"],
+        "intent": ["Educate & Inform (Value-add)", "Establish Authority (Trust building)"],
+        "voice": ["Authoritative (The Expert)", "Technical (Precision-focused)", "Grounded (Practical/Common sense)"],
+        "audience": ["IT Managers (Infrastructure focus)", "Procurement Officers (Cost/SLA focus)", "Field Technicians (Implementation focus)"]
+      }
+    }
+  },
+
+  "channelRules": {
+    "linkedin": {
+      "preferLengths": ["Punchy/Micro (1–2 sentences)", "Headline/Hook Only", "The \"TL;DR\" (Short summary first)", "Short Narrative"]
+    },
+    "facebook": {
+      "preferLengths": ["Standard Post (2–3 paragraphs)", "Short Narrative", "The \"LinkedIn Bro\" (Heavy white space)"]
+    },
+    "blog": {
+      "preferLengths": ["Deep Dive (Long-form)", "Standard Post (2–3 paragraphs)", "Bullet-Point Summary", "Actionable Checklist"]
+    }
+  },
+
+  "comboBans": [
+    { "ifAngle": "The Parable (Metaphor-heavy)", "thenNotLength": "The \"LinkedIn Bro\" (Heavy white space)" },
+    { "ifAngle": "Step-by-Step Guide", "thenNotLength": "Punchy/Micro (1–2 sentences)" },
+    { "ifAngle": "Step-by-Step Guide", "thenNotLength": "Headline/Hook Only" },
+    { "ifIntent": "Generate Leads (Inquiry focus)", "thenNotPov": "The Skeptic – Playing Devil's Advocate" }
+  ]
+}

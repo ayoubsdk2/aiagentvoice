@@ -1,0 +1,127 @@
+project_id = "rgiesetdwhbwayjjgvnb"
+
+[functions.api-proxy]
+verify_jwt = false
+
+[functions.turn-engine]
+verify_jwt = false
+
+[functions.manage-keys]
+verify_jwt = false
+
+[functions.agentic-tools]
+verify_jwt = false
+
+[functions.prompt-manager]
+verify_jwt = false
+
+[functions.elevenlabs-tts]
+verify_jwt = false
+
+[functions.ai-chat]
+verify_jwt = false
+
+[functions.retell-webhook]
+verify_jwt = false
+
+[functions.retell-access-token]
+verify_jwt = false
+
+[functions.list-retell-voices]
+verify_jwt = false
+
+[functions.retell-llm-context]
+verify_jwt = false
+
+[functions.provision-worker]
+verify_jwt = false
+
+[functions.provision-enqueue]
+verify_jwt = false
+
+[functions.firecrawl-ingest]
+verify_jwt = true
+
+[functions.integration-toggle]
+verify_jwt = true
+
+[functions.validate-integration]
+verify_jwt = false
+
+[functions.dsar-export]
+verify_jwt = false
+
+[functions.dsar-delete]
+verify_jwt = false
+
+[functions.data-retention-sweep]
+verify_jwt = false
+
+[functions.sandbox-health-check]
+verify_jwt = false
+
+[functions.compliance-evidence-bundle]
+verify_jwt = false
+
+[functions.notify-security-event]
+verify_jwt = false
+
+# Save+test integration credentials — needs JWT to identify caller's tenant
+[functions.save-integration-credentials]
+verify_jwt = true
+
+[functions.disable-integration]
+verify_jwt = true
+
+# Telnyx public webhook (signature is the auth)
+[functions.telnyx-webhook]
+verify_jwt = false
+
+# Adapters require caller JWT to scope to their tenant
+[functions.sales-chain-sync]
+verify_jwt = true
+
+[functions.eautomate-sync]
+verify_jwt = true
+
+# Admin-only user analytics; we validate the JWT + admin role in code
+[functions.admin-users]
+verify_jwt = false
+
+# Payment & billing functions — verify_jwt=false (auth handled in code or webhook signature)
+[functions.create-setup-intent]
+verify_jwt = false
+
+[functions.payments-webhook]
+verify_jwt = false
+
+[functions.run-monthly-billing]
+verify_jwt = false
+
+[functions.cancel-subscription]
+verify_jwt = false
+
+[functions.process-email-queue]
+verify_jwt = true
+
+[functions.send-transactional-email]
+verify_jwt = true
+
+[functions.send-contact-email]
+verify_jwt = false
+
+[functions.preview-transactional-email]
+verify_jwt = false
+
+[functions.handle-email-unsubscribe]
+verify_jwt = false
+
+[functions.handle-email-suppression]
+verify_jwt = false
+
+[functions.send-industry-invite]
+verify_jwt = true
+
+# Retell inbound-call webhook — public (Retell server-to-server)
+[functions.retell-inbound]
+verify_jwt = false

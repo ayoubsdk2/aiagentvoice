@@ -1,0 +1,16 @@
+# Phaos AI
+
+> Voice AI and agentic workflow automation built for the Managed Print & Copier industry. 24/7 inbound dispatch, toner ordering, meter reads, and warm sales handoffs.
+
+Phaos AI ("Phoebe") is a domain-trained voice agent for print and copier dealers. It handles inbound service calls, scores leads, and routes work into dealer ERPs.
+
+## Pages
+
+- [Home](/): Overview of the Phaos AI command center for managed print dealers.
+- [Live Sandbox](/try): Talk to Phoebe in your browser — predictive service calls, toner orders, dispatch, and account review scenarios.
+- [Contact](/contact): Request a demo, ask a question, or start a pilot.
+- [Trust & Compliance](/trust): Frameworks, sub-processors, and data handling commitments.
+
+## Optional
+
+- [Sign in](/auth): Dealer and operator portal.

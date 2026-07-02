@@ -1,0 +1,1 @@
+ALTER TABLE public.live_account_agents ADD COLUMN IF NOT EXISTS system_prompt text;
