@@ -49,7 +49,10 @@ export default function TelephonyPage() {
   const [adding, setAdding] = useState(false);
 
   async function refresh() {
-    if (!org) return;
+    if (!org) {
+      setLoading(false);
+      return;
+    }
     setLoading(true);
     try {
       const [{ data: a, error: aErr }, { data: l, error: lErr }] = await Promise.all([

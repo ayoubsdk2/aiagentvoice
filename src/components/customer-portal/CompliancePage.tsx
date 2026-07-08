@@ -32,7 +32,10 @@ export default function CompliancePage() {
   const [evidence, setEvidence] = useState<EvidenceRow[]>([]);
 
   async function refresh() {
-    if (!org) return;
+    if (!org) {
+      setLoading(false);
+      return;
+    }
     setLoading(true);
     try {
       const [{ data: r, error: rErr }, { data: e, error: eErr }] = await Promise.all([

@@ -92,6 +92,19 @@ function CustomerEntry() {
   if (status === "loading") return <Loader />;
   if (status === "error") return <Loader />;
 
+  if (!org) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-background p-6">
+        <div className="glass-card max-w-md p-6 text-center space-y-3">
+          <h1 className="text-lg font-bold">Organization missing</h1>
+          <p className="text-sm text-muted-foreground">
+            Your account is not linked to any organization. Please contact support.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
   // Step 0 — payment method must be on file before any other onboarding
   // (unless the user dismissed it for this session).
   if (org && !org.stripe_payment_method_verified && !paymentDismissed) {

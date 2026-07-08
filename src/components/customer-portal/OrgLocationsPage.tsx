@@ -28,7 +28,10 @@ export default function OrgLocationsPage() {
   const [adding, setAdding] = useState(false);
 
   async function refresh() {
-    if (!org) return;
+    if (!org) {
+      setLoading(false);
+      return;
+    }
     setLoading(true);
     try {
       const { data, error } = await supabase
