@@ -338,7 +338,78 @@ export function useVapi(options: UseVapiOptions = {}): UseVapiReturn {
       });
 
       if (error || !data?.access_token) {
-        throw new Error(error?.message || "Could not mint voice access token");
+        // --- FALLBACK: Local Demo Mode ---
+        console.warn("Retell connection failed, falling back to Local Demo Mode");
+        try {
+          const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+          
+          setCallDuration(0);
+          setTranscript([]);
+          setReasoning([]);
+          setStructuredOutputs([]);
+          setLatencyMs(null);
+          setHighLatency(false);
+          setSpecAlerts([]);
+          setLiveQueryActive(false);
+          detectedModelsRef.current.clear();
+          transcriptRef.current = [];
+          lastTranscriptLengthRef.current = 0;
+          
+          setCallActive(true);
+          setCallConnecting(false);
+          markActivity();
+          
+          addReasoning("Retell API unavailable — falling back to Local Demo Mode", "action");
+          addTranscript({ role: "system", text: "Connected in Local Demo Mode (Mic Active)", timestamp: "00:00" });
+          
+          // Setup audio analyzer for volume bouncing
+          const audioCtx = new (window.AudioContext || (window as any).webkitAudioContext)();
+          const analyser = audioCtx.createAnalyser();
+          const source = audioCtx.createMediaStreamSource(stream);
+          source.connect(analyser);
+          analyser.fftSize = 256;
+          const bufferLength = analyser.frequencyBinCount;
+          const dataArray = new Uint8Array(bufferLength);
+          
+          let animationFrame: number;
+          const updateVolume = () => {
+             analyser.getByteFrequencyData(dataArray);
+             let sum = 0;
+             for(let i = 0; i < bufferLength; i++) sum += dataArray[i];
+             const avg = sum / bufferLength;
+             // normalized 0 to 1
+             setVolumeLevel(Math.min(1, avg / 128));
+             
+             if (avg > 30 && lastTranscriptLengthRef.current === 0) {
+                addReasoning("Mic active: Audio signal detected", "intent");
+                lastTranscriptLengthRef.current = 1;
+             }
+             animationFrame = requestAnimationFrame(updateVolume);
+          };
+          updateVolume();
+          
+          // Fake AI Response
+          setTimeout(() => {
+             setIsSpeaking(true);
+             addTranscript({ 
+               role: "ai", 
+               text: "Hello! I am in local offline mode. I can hear your microphone, but my AI brain is not connected because the API key is missing.", 
+               timestamp: "00:01" 
+             });
+             setTimeout(() => setIsSpeaking(false), 6000);
+          }, 1500);
+          
+          retellInstance = {
+             stopCall: () => {
+                cancelAnimationFrame(animationFrame);
+                stream.getTracks().forEach(t => t.stop());
+                audioCtx.close();
+             }
+          } as unknown as RetellWebClient;
+          return;
+        } catch (micErr) {
+          throw new Error("Could not mint voice access token, and local mic access was denied.");
+        }
       }
 
       const client = new RetellWebClient();
