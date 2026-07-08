@@ -5,6 +5,8 @@ import { useCurrentOrg } from "@/hooks/useCurrentOrg";
 import { OnboardingWizard } from "@/components/onboarding/OnboardingWizard";
 import { PaymentMethodOnboarding } from "@/components/onboarding/PaymentMethodOnboarding";
 import Index from "@/pages/Index";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 const CustomerPortal = lazy(() => import("@/pages/CustomerPortal"));
 const PendingApproval = lazy(() => import("@/pages/PendingApproval"));
