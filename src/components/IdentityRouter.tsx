@@ -105,37 +105,8 @@ function CustomerEntry() {
           <button
             onClick={async () => {
               try {
-                const { data: { user } } = await supabase.auth.getUser();
-                if (!user) throw new Error("Not authenticated");
-                
-                // 1. Create the org
-                const orgId = crypto.randomUUID();
-                const { error: orgErr } = await supabase
-                  .from("organizations")
-                  .insert({
-                    id: orgId,
-                    slug: `org-${Date.now()}`,
-                    name: "My Organization",
-                    created_by: user.id,
-                    billing_email: user.email,
-                    onboarding_completed: false,
-                    onboarding_step: 1
-                  });
-                  
-                if (orgErr) throw orgErr;
-
-                // 2. Add the user as owner
-                const { error: memErr } = await supabase
-                  .from("organization_members")
-                  .insert({
-                    organization_id: orgId,
-                    user_id: user.id,
-                    role: "owner"
-                  });
-
-                if (memErr) throw memErr;
-                
-                // 3. Refresh state
+                const { data, error } = await supabase.rpc("bootstrap_my_organization");
+                if (error) throw error;
                 toast.success("Organization created!");
                 void refresh();
               } catch (e: any) {
