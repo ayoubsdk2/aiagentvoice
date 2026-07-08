@@ -109,18 +109,18 @@ function CustomerEntry() {
                 if (!user) throw new Error("Not authenticated");
                 
                 // 1. Create the org
-                const { data: newOrg, error: orgErr } = await supabase
+                const orgId = crypto.randomUUID();
+                const { error: orgErr } = await supabase
                   .from("organizations")
                   .insert({
+                    id: orgId,
                     slug: `org-${Date.now()}`,
                     name: "My Organization",
                     created_by: user.id,
                     billing_email: user.email,
                     onboarding_completed: false,
                     onboarding_step: 1
-                  })
-                  .select("id")
-                  .single();
+                  });
                   
                 if (orgErr) throw orgErr;
 
@@ -128,7 +128,7 @@ function CustomerEntry() {
                 const { error: memErr } = await supabase
                   .from("organization_members")
                   .insert({
-                    organization_id: newOrg.id,
+                    organization_id: orgId,
                     user_id: user.id,
                     role: "owner"
                   });
@@ -138,8 +138,9 @@ function CustomerEntry() {
                 // 3. Refresh state
                 toast.success("Organization created!");
                 void refresh();
-              } catch (e) {
-                toast.error(e instanceof Error ? e.message : "Failed to create organization");
+              } catch (e: any) {
+                toast.error(e?.message || "Failed to create organization");
+                console.error("Org creation error:", e);
               }
             }}
             className="w-full px-4 py-2 mt-4 text-sm font-bold rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
