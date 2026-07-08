@@ -84,7 +84,7 @@ DECLARE _row public.live_accounts%ROWTYPE; _hash text;
 BEGIN
   IF auth.uid() IS NULL THEN RAISE EXCEPTION 'auth required'; END IF;
   IF _code IS NULL OR char_length(_code) < 5 THEN RETURN; END IF;
-  _hash := encode(digest(_code, 'sha256'), 'hex');
+  _hash := encode(extensions.digest(_code, 'sha256'), 'hex');
   SELECT * INTO _row FROM public.live_accounts WHERE access_code_hash = _hash AND is_active = true LIMIT 1;
   IF NOT FOUND THEN RETURN; END IF;
   UPDATE public.profiles

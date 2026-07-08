@@ -12,7 +12,7 @@ CREATE POLICY "self insert as viewer"
   );
 
 -- 2) Revoke EXECUTE on SECURITY DEFINER helper from end-user roles.
-REVOKE EXECUTE ON FUNCTION public.set_active_tools(uuid, text, jsonb) FROM PUBLIC;
-REVOKE EXECUTE ON FUNCTION public.set_active_tools(uuid, text, jsonb) FROM anon;
-REVOKE EXECUTE ON FUNCTION public.set_active_tools(uuid, text, jsonb) FROM authenticated;
+DO $$ BEGIN EXECUTE 'REVOKE EXECUTE ON FUNCTION public.set_active_tools(uuid, text, jsonb) FROM PUBLIC'; EXCEPTION WHEN undefined_function THEN NULL; END $$;
+DO $$ BEGIN EXECUTE 'REVOKE EXECUTE ON FUNCTION public.set_active_tools(uuid, text, jsonb) FROM anon'; EXCEPTION WHEN undefined_function THEN NULL; END $$;
+DO $$ BEGIN EXECUTE 'REVOKE EXECUTE ON FUNCTION public.set_active_tools(uuid, text, jsonb) FROM authenticated'; EXCEPTION WHEN undefined_function THEN NULL; END $$;
 GRANT EXECUTE ON FUNCTION public.set_active_tools(uuid, text, jsonb) TO service_role;

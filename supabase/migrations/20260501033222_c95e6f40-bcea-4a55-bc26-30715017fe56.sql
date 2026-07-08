@@ -5,6 +5,7 @@
 -- =====================================================================
 
 -- ---------- Enums ----------
+/*
 CREATE TYPE public.portal_platform_role AS ENUM (
   'internal_super_admin','internal_operator','customer_owner','customer_admin',
   'location_manager','viewer','trial_user'
@@ -16,6 +17,7 @@ CREATE TYPE public.portal_phone_status AS ENUM ('active','inactive','provisionin
 CREATE TYPE public.portal_agent_status AS ENUM ('active','inactive');
 CREATE TYPE public.portal_integration_status AS ENUM ('connected','setup_required','error');
 CREATE TYPE public.portal_membership_role AS ENUM ('owner','admin','location_manager','viewer','trial');
+*/
 
 -- ---------- Shared updated_at trigger fn ----------
 CREATE OR REPLACE FUNCTION public.portal_set_updated_at() RETURNS trigger

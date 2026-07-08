@@ -1,6 +1,6 @@
 
-REVOKE EXECUTE ON FUNCTION public.set_active_tools(uuid, text, jsonb) FROM PUBLIC, anon;
-REVOKE EXECUTE ON FUNCTION public.match_knowledge(uuid, vector, int) FROM PUBLIC, anon, authenticated;
+DO $$ BEGIN EXECUTE 'REVOKE EXECUTE ON FUNCTION public.set_active_tools(uuid, text, jsonb) FROM PUBLIC, anon'; EXCEPTION WHEN undefined_function THEN NULL; END $$;
+DO $$ BEGIN EXECUTE 'REVOKE EXECUTE ON FUNCTION public.match_knowledge(uuid, vector, int) FROM PUBLIC, anon, authenticated'; EXCEPTION WHEN undefined_function THEN NULL; END $$;
 
 -- Move pgvector out of public into a dedicated extensions schema
 CREATE SCHEMA IF NOT EXISTS extensions;

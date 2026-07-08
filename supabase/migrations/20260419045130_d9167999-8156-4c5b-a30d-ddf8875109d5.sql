@@ -4,7 +4,7 @@ ALTER TABLE public.live_accounts
 
 -- Backfill: SHA-256 of existing plaintext codes
 UPDATE public.live_accounts
-SET access_code_hash = encode(digest(access_code, 'sha256'), 'hex')
+SET access_code_hash = encode(extensions.digest(access_code, 'sha256'), 'hex')
 WHERE access_code_hash IS NULL;
 
 ALTER TABLE public.live_accounts
@@ -31,7 +31,7 @@ BEGIN
     RETURN;
   END IF;
 
-  _hash := encode(digest(_code, 'sha256'), 'hex');
+  _hash := encode(extensions.digest(_code, 'sha256'), 'hex');
 
   SELECT * INTO _row
   FROM public.live_accounts

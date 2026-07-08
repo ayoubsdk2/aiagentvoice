@@ -1,4 +1,4 @@
-DROP POLICY "users update own profile (non-customer fields)" ON public.profiles;
+DROP POLICY IF EXISTS "users update own profile (non-customer fields)" ON public.profiles;
 CREATE POLICY "users update own profile (non-customer fields)" ON public.profiles
 FOR UPDATE
 USING (auth.uid() = id)

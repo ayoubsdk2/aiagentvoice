@@ -1,2 +1,2 @@
-REVOKE EXECUTE ON FUNCTION public.email_queue_dispatch() FROM PUBLIC, anon, authenticated;
-REVOKE EXECUTE ON FUNCTION public.email_queue_wake() FROM PUBLIC, anon, authenticated;
+DO $$ BEGIN EXECUTE 'REVOKE EXECUTE ON FUNCTION public.email_queue_dispatch() FROM PUBLIC, anon, authenticated'; EXCEPTION WHEN undefined_function THEN NULL; END $$;
+DO $$ BEGIN EXECUTE 'REVOKE EXECUTE ON FUNCTION public.email_queue_wake() FROM PUBLIC, anon, authenticated'; EXCEPTION WHEN undefined_function THEN NULL; END $$;
