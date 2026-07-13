@@ -3,6 +3,12 @@ project_id = "rgiesetdwhbwayjjgvnb"
 [functions.api-proxy]
 verify_jwt = false
 
+[functions.admin-gate]
+verify_jwt = false
+
+[functions.admin-api]
+verify_jwt = false
+
 [functions.turn-engine]
 verify_jwt = false
 

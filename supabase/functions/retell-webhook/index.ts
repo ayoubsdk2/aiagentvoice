@@ -91,12 +91,39 @@ Deno.serve(async (req) => {
     if (type === "call_ended" || type === "call_analyzed") {
       // Best-effort transcript persistence; never block ack.
       try {
-        await admin.from("calls").insert({
-          vapi_call_id: call.call_id,
-          provider: "retell",
-          transcript_url: null,
-          metadata: call as any,
-        } as any);
+        let orgId = null;
+        if (call.agent_id) {
+          const { data: agentData, error: agentErr } = await admin
+            .from("retell_agents")
+            .select("org_id")
+            .eq("retell_agent_id", call.agent_id)
+            .single();
+          
+          if (agentErr) {
+            log.warn("failed to lookup agent org_id", { err: agentErr.message });
+          } else if (agentData) {
+            orgId = agentData.org_id;
+          }
+        }
+
+        if (orgId) {
+          const { error: insertErr } = await admin.from("portal_calls").insert({
+            org_id: orgId,
+            // Note: portal_calls schema requires location_id and phone_number_id.
+            // If they are NOT NULL in DB, this insert will fail without them.
+            caller_phone: call.from_number,
+            metadata: call as any,
+          } as any);
+          if (insertErr) throw new Error(`portal_calls insert error: ${insertErr.message}`);
+        } else {
+          log.warn("no org_id found for agent, falling back to legacy calls table", { agent_id: call.agent_id });
+          await admin.from("calls").insert({
+            vapi_call_id: call.call_id,
+            provider: "retell",
+            transcript_url: null,
+            metadata: call as any,
+          } as any);
+        }
       } catch (err) {
         log.warn("transcript persist failed", { err: String(err) });
       }
