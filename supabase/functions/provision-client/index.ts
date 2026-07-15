@@ -66,7 +66,9 @@ type Resource =
   | { kind: "retell_phone"; e164: string }
   | { kind: "db_live_account"; id: string }
   | { kind: "db_agent"; id: string }
-  | { kind: "db_phone"; id: string };
+  | { kind: "db_phone"; id: string }
+  | { kind: "db_org"; id: string }
+  | { kind: "db_retell_agent"; id: string };
 
 async function rollback(resources: Resource[]) {
   for (let i = resources.length - 1; i >= 0; i--) {
@@ -77,6 +79,8 @@ async function rollback(resources: Resource[]) {
       else if (r.kind === "db_phone")     await admin.from("live_account_phone_numbers").delete().eq("id", r.id);
       else if (r.kind === "db_agent")     await admin.from("live_account_agents").delete().eq("id", r.id);
       else if (r.kind === "db_live_account") await admin.from("live_accounts").delete().eq("id", r.id);
+      else if (r.kind === "db_retell_agent") await admin.from("retell_agents").delete().eq("id", r.id);
+      else if (r.kind === "db_org")          await admin.from("organizations").delete().eq("id", r.id);
     } catch (err) {
       log.warn("rollback step failed", { resource: r, err: String(err) });
     }
@@ -153,7 +157,57 @@ Deno.serve(async (req) => {
     }
   }
 
+  // 1b. Organization (create or reuse by billing_email for the unified system).
+  //     Existing legacy tables are untouched — this is additive.
+  let orgId: string;
+  let orgIsNew = false;
+  {
+    const { data: existingOrg } = await admin
+      .from("organizations").select("id").eq("billing_email", p.email_address).maybeSingle();
+    if (existingOrg?.id) {
+      orgId = existingOrg.id as string;
+    } else {
+      // Build a URL-safe slug from company name (mirrors bootstrap_org_for_new_user)
+      let baseSlug = p.company_name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+      if (!baseSlug) baseSlug = "org";
+      let slug = baseSlug;
+      let suffix = 0;
+      // Collision loop: keep appending -N until slug is unique
+      while (true) {
+        const { data: clash } = await admin
+          .from("organizations").select("id").eq("slug", slug).maybeSingle();
+        if (!clash?.id) break;
+        suffix++;
+        slug = `${baseSlug}-${suffix}`;
+      }
+
+      const { data: createdOrg, error: orgErr } = await admin
+        .from("organizations").insert({
+          slug,
+          name: p.company_name,
+          billing_email: p.email_address,
+          onboarding_completed: true,
+          onboarding_step: 4,
+        }).select("id").single();
+      if (orgErr || !createdOrg) {
+        log.error("organization_create_failed", { err: orgErr?.message });
+        return new Response(JSON.stringify({ error: "organization_create_failed" }), {
+          status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+      orgId = createdOrg.id as string;
+      orgIsNew = true;
+
+      // Best-effort branding stub
+      await admin.from("organization_branding").insert({ organization_id: orgId })
+        .then(() => {})
+        .catch(() => {});
+    }
+  }
+
   const created: Resource[] = [];
+  // Track the new org for rollback only if we created it
+  if (orgIsNew) created.push({ kind: "db_org", id: orgId });
   const resultLines: Array<{
     label: string; e164: string; retell_agent_id: string; routing_type: string;
     industry_id: string; base_agent_id: string;
@@ -293,6 +347,27 @@ Deno.serve(async (req) => {
       if (phoneErr || !phoneRow) throw new Error(`phone_insert_failed:${phoneErr?.message ?? "unknown"}`);
       created.push({ kind: "db_phone", id: phoneRow.id });
 
+      // Unified system: upsert retell_agents row so retell-webhook can
+      // resolve agent_id → org_id → portal_calls. UNIQUE is (org_id,
+      // retell_agent_id) so multiple lines sharing the same shared base
+      // agent upsert into the same row (last line's phone/label wins).
+      const { data: raRow, error: raErr } = await admin
+        .from("retell_agents")
+        .upsert({
+          org_id: orgId,
+          retell_agent_id: baseAgentId,
+          phone_e164: purchased.phone_number,
+          label: line.label,
+          is_primary: isFirst,
+        }, { onConflict: "org_id,retell_agent_id" })
+        .select("id")
+        .single();
+      if (raErr || !raRow) {
+        log.warn("retell_agents upsert failed (non-fatal)", { err: raErr?.message });
+      } else {
+        created.push({ kind: "db_retell_agent", id: raRow.id });
+      }
+
       if (isFirst) {
         primaryAgentDbId = agentRow.id;
         primaryIndustryId = lineIndustryId;
@@ -311,6 +386,7 @@ Deno.serve(async (req) => {
 
     return new Response(JSON.stringify({
       customer_id: customerId,
+      org_id: orgId,
       primary_agent_id: primaryAgentDbId,
       lines: resultLines,
     }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
