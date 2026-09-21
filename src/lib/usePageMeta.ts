@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 
-const SITE_URL = "https://voice.phaosai.com";
+const SITE_URL = "https://aiagentvoice-ten.vercel.app";
 
 interface PageMeta {
   title: string;

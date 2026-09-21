@@ -122,9 +122,19 @@ export default function CompliancePage() {
                     ) : (
                       <Badge variant="outline" className="text-[10px] gap-1 bg-amber-500/15 text-amber-300 border-amber-500/30">
                         <AlertTriangle className="w-3 h-3" /> {r.legal_agreement_status}
-
-
-
+                      </Badge>
+                    )}
+                  </div>
+                  <div className="mt-3 grid grid-cols-2 gap-2 text-xs">
+                    <Stat label="Annex" value={r.annex_generated ? "Generated" : "Pending"} good={r.annex_generated} />
+                    <Stat label="Controls mapped" value={`${r.controls_mapped}`} good={r.controls_mapped > 0} />
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        )}
+      </section>
 
       <section>
         <h2 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground mb-3">Legal agreements</h2>

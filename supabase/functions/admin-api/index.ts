@@ -164,7 +164,7 @@ async function runDetailedTest(id: string, c: Record<string, string>): Promise<D
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
               fields: [{ name: "email", value: "connection-test@phaosai.com" }],
-              context: { pageUri: "https://voice.phaosai.com/admin", pageName: "Phaos AI HubSpot Test" },
+              context: { pageUri: "https://aiagentvoice-ten.vercel.app/admin", pageName: "Phaos AI HubSpot Test" },
             }),
             redirect: "manual",
           },
@@ -630,7 +630,7 @@ Deno.serve(async (req) => {
               { name: "firstname", value: "Phaos" },
               { name: "lastname", value: "Connection Test" },
             ],
-            context: { pageUri: "https://voice.phaosai.com/admin", pageName: "Phaos AI Admin · HubSpot Connection Test" },
+            context: { pageUri: "https://aiagentvoice-ten.vercel.app/admin", pageName: "Phaos AI Admin · HubSpot Connection Test" },
           }),
         });
         clearTimeout(timer);

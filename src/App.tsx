@@ -52,6 +52,15 @@ const AnalyticsROI = lazy(() =>
 const LiveAccountsAdmin = lazy(() =>
   import("./components/command-center/LiveAccountsAdmin").then((m) => ({ default: m.LiveAccountsAdmin })),
 );
+const AgentWorkflows = lazy(() =>
+  import("./components/command-center/AgentWorkflows").then((m) => ({ default: m.AgentWorkflows })),
+);
+const IntegrationMap = lazy(() =>
+  import("./components/command-center/IntegrationMap").then((m) => ({ default: m.IntegrationMap })),
+);
+const ComplianceHub = lazy(() =>
+  import("./components/command-center/ComplianceHub").then((m) => ({ default: m.ComplianceHub })),
+);
 
 
 const queryClient = new QueryClient();
@@ -128,8 +137,9 @@ const App = () => (
                 <Route index element={<ExecutiveDashboard />} />
                 <Route path="transcripts" element={<CallHistory />} />
                 <Route path="sandbox" element={<AdminSandboxPage />} />
-                
-                
+                <Route path="workflows" element={<AgentWorkflows />} />
+                <Route path="integrations" element={<IntegrationMap />} />
+                <Route path="compliance" element={<ComplianceHub />} />
                 <Route path="leads" element={<LeadsDashboard />} />
                 <Route path="analytics" element={<AnalyticsROI />} />
                 <Route path="accounts" element={<LiveAccountsAdmin />} />

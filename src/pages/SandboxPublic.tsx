@@ -16,7 +16,7 @@ const Fallback = () => (
 );
 
 export default function SandboxPublic() {
-  // /:industryId deep-link support (e.g. voice.phaosai.com/document-solutions).
+  // /:industryId deep-link support (e.g. aiagentvoice-ten.vercel.app/document-solutions).
   // The catch-all route uses `slug`; the explicit /i/:industryId route uses `industryId`.
   const params = useParams<{ industryId?: string; slug?: string }>();
   const rawId = params.industryId ?? params.slug;

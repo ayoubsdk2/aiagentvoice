@@ -10,6 +10,9 @@ import {
   Send,
   Mic,
   LogOut,
+  Workflow,
+  Database,
+  ShieldCheck,
 } from "lucide-react";
 import { clearAdminToken } from "@/lib/admin-session";
 import { useNavigate } from "react-router-dom";
@@ -17,9 +20,12 @@ import { cn } from "@/lib/utils";
 
 const items: { to: string; label: string; icon: typeof LayoutDashboard }[] = [
   { to: "/admin", label: "Global Dashboard", icon: LayoutDashboard },
+  { to: "/admin/workflows", label: "Agent Workflows", icon: Workflow },
   { to: "/admin/transcripts", label: "Call Transcript", icon: PhoneCall },
   { to: "/admin/sandbox", label: "Sandbox", icon: Mic },
   { to: "/admin/leads", label: "Lead Intelligence", icon: Users },
+  { to: "/admin/integrations", label: "Integrations", icon: Database },
+  { to: "/admin/compliance", label: "Ironclad Compliance", icon: ShieldCheck },
   { to: "/admin/analytics", label: "Analytics & ROI", icon: BarChart3 },
   { to: "/admin/accounts", label: "Live Accounts", icon: Building2 },
   { to: "/admin/send-audit", label: "SEND Audit Log", icon: Send },

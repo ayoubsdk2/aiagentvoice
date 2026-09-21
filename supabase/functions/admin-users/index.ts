@@ -1,5 +1,5 @@
 /**
- * admin-users — Admin-only user analytics for voice.phaosai.com
+ * admin-users — Admin-only user analytics for aiagentvoice-ten.vercel.app
  *
  * SECURITY MODEL
  *  - Caller must present a valid Supabase access token (Authorization: Bearer ...).

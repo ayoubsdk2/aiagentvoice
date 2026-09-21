@@ -13,4 +13,4 @@ Allow: /
 User-agent: *
 Allow: /
 
-Sitemap: https://voice.phaosai.com/sitemap.xml
+Sitemap: https://aiagentvoice-ten.vercel.app/sitemap.xml

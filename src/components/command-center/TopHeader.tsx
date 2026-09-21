@@ -170,6 +170,14 @@ export function TopHeader({ onNavigate, publicMode = false, brandLabel }: TopHea
             )}
             <button
               type="button"
+              onClick={() => navigate("/auth")}
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full border border-border/50 bg-secondary/40 text-foreground text-xs sm:text-sm font-bold uppercase tracking-wider hover:bg-secondary/60 transition-all"
+              aria-label="Log in to Phaos AI"
+            >
+              Login
+            </button>
+            <button
+              type="button"
               onClick={() => navigate("/contact")}
               className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-gradient-to-r from-primary to-primary/70 text-primary-foreground text-xs sm:text-sm font-bold uppercase tracking-wider shadow-lg shadow-primary/30 hover:opacity-95 transition-all"
               aria-label="Sign up now — open contact form"

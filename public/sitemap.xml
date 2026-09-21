@@ -1,27 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://voice.phaosai.com/</loc>
+    <loc>https://aiagentvoice-ten.vercel.app/</loc>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://voice.phaosai.com/try</loc>
+    <loc>https://aiagentvoice-ten.vercel.app/try</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://voice.phaosai.com/contact</loc>
+    <loc>https://aiagentvoice-ten.vercel.app/contact</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://voice.phaosai.com/trust</loc>
+    <loc>https://aiagentvoice-ten.vercel.app/trust</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://voice.phaosai.com/auth</loc>
+    <loc>https://aiagentvoice-ten.vercel.app/auth</loc>
     <changefreq>monthly</changefreq>
     <priority>0.4</priority>
   </url>
